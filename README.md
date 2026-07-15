@@ -2,6 +2,22 @@
 
 CRUD API for real estate listings with search filters and JWT authentication via HttpOnly cookies.
 
+## Architecture
+
+Clean Architecture layers:
+
+```
+app/
+  domain/           # entities, enums, repository interfaces, exceptions
+  application/      # use cases + DTOs
+  infrastructure/   # SQLAlchemy, JWT, bcrypt, UoW
+  presentation/     # FastAPI routers, schemas, DI
+  main.py
+  config.py
+```
+
+Dependencies point inward: presentation → application → domain ← infrastructure.
+
 ## Features
 
 - Register / login / logout / current user
@@ -24,6 +40,7 @@ Open docs: http://127.0.0.1:8000/docs
 ## Tests
 
 ```bash
+.\.venv\Scripts\Activate.ps1
 pytest -v
 ```
 

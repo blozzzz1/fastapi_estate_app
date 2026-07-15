@@ -1,16 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import Base, engine
-from app.routers import auth, properties
+from app.domain.exceptions import DomainError
+from app.infrastructure.database.session import init_db
+from app.presentation.exception_handlers import domain_error_handler
+from app.presentation.routers import auth, properties
 
-Base.metadata.create_all(bind=engine)
+init_db()
 
 app = FastAPI(
     title="Real Estate API",
     description="CRUD API for real estate listings with search filters and JWT cookie auth",
     version="1.0.0",
 )
+
+app.add_exception_handler(DomainError, domain_error_handler)
 
 app.add_middleware(
     CORSMiddleware,

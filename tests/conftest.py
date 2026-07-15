@@ -5,7 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.database import Base, get_db
+from app.infrastructure.database.base import Base
+from app.infrastructure.database.session import get_db
+from app.infrastructure.orm import models as _orm_models  # noqa: F401
 from app.main import app
 
 PROPERTY_PAYLOAD = {

@@ -1,26 +1,13 @@
 from datetime import datetime
-from enum import Enum
 
 from sqlalchemy import Boolean, DateTime, Enum as SAEnum, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database import Base
+from app.domain.enums import DealType, PropertyType
+from app.infrastructure.database.base import Base
 
 
-class PropertyType(str, Enum):
-    apartment = "apartment"
-    house = "house"
-    studio = "studio"
-    commercial = "commercial"
-    land = "land"
-
-
-class DealType(str, Enum):
-    sale = "sale"
-    rent = "rent"
-
-
-class User(Base):
+class UserModel(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
@@ -30,10 +17,12 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    properties: Mapped[list["Property"]] = relationship(back_populates="owner", cascade="all, delete-orphan")
+    properties: Mapped[list["PropertyModel"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan"
+    )
 
 
-class Property(Base):
+class PropertyModel(Base):
     __tablename__ = "properties"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
@@ -55,4 +44,4 @@ class Property(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    owner: Mapped["User"] = relationship(back_populates="properties")
+    owner: Mapped["UserModel"] = relationship(back_populates="properties")

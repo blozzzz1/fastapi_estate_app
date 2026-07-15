@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from app.models import DealType, PropertyType
+from app.domain.enums import DealType, PropertyType
 
 
 class UserCreate(BaseModel):
